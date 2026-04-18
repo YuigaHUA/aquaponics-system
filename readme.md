@@ -1,199 +1,188 @@
-# 鱼菜共生WEB开发方案0414v1.2
+# Aquaponics Intelligent Management System
 
-## 开发工具：
+## Development Tools
 
-* VSCode（Python/Flask、前端页面代码编写与调试）
-* MySQL（数据库存储）
-* 浏览器
-* Postman
-* MQTTX / MQTT Explorer（MQTT 消息调试，可选）
+- VSCode (Python/Flask development, frontend page coding and debugging)
+- MySQL (database storage)
+- Browser (frontend page testing)
+- Postman (API debugging, optional)
+- MQTTX / MQTT Explorer (MQTT message debugging, optional)
 
-## 开发语言：
+## Development Languages
 
-* Python
-* HTML
-* CSS
-* JavaScript
+- Python
+- HTML
+- CSS
+- JavaScript
 
-## 技术栈：
+## Technology Stack
 
-* 后端框架：Flask
-* 前端页面：HTML + CSS + JavaScript
-* 前端 UI 框架：Bootstrap 5 + AdminLTE
-* 图表展示：ECharts
-* 模板引擎：Jinja2
-* 实时通信：WebSocket
-* 消息传输：MQTT
-* 数据存储：MySQL
-* AI 对话接入：DeepSeek Chat 接口
-* 轻量知识库：RAG 检索增强
-* 数据模拟模块：Python 实现动态数据模拟器
+| Layer | Technology |
+|:---|:---|
+| Backend Framework | Flask |
+| Frontend Pages | HTML + CSS + JavaScript |
+| Frontend UI Framework | Bootstrap 5 + AdminLTE |
+| Chart Visualization | ECharts |
+| Template Engine | Jinja2 |
+| Real-Time Communication | WebSocket |
+| Message Transport | MQTT |
+| Data Storage | MySQL |
+| AI Dialogue Integration | DeepSeek Chat API |
+| Lightweight Knowledge Base | RAG (Retrieval-Augmented Generation) |
+| Data Simulation Module | Dynamic data simulator implemented in Python |
 
-## 元件列表：
+## Hardware Components
 
-* 无硬件
+- No physical hardware required
 
-## 整体功能/需求：
+## Overall Functionality and Requirements
 
-### 一、前端页面功能
+### I. Frontend Page Functionality
 
-#### 1. 监控大屏
+#### 1. Monitoring Dashboard
 
-用于展示鱼菜共生系统的核心监测信息，页面风格需美观、直观，具备较好的可视化效果。主要包括：
+Used to display core monitoring information of the aquaponics system. The page should be visually appealing, intuitive, and provide effective data visualization. Key features include:
 
-* 展示水温、pH、溶解氧、空气温度、空气湿度等实时环境数据；
-* 展示主要设备当前状态，如水泵、增氧机、补光灯、风机等；
-* 展示告警信息，如数据超阈值、设备异常等；
-* 支持通过 WebSocket 实时刷新数据；
-* 支持使用 ECharts 展示折线图、仪表盘或柱状图等可视化内容。
+- Display real-time environmental data such as water temperature, pH, dissolved oxygen, air temperature, and air humidity
+- Display current status of major equipment, including pump, aerator, grow light, and fan
+- Display alert information such as threshold violations and device anomalies
+- Support real-time data refresh via WebSocket
+- Support ECharts visualizations including line charts, gauge charts, and bar charts
 
-#### 2. AI 对话界面
+#### 2. AI Dialogue Interface
 
-用于实现系统内置 AI 助手功能，提供基础智能问答能力。主要包括：
+Used to implement the built-in AI assistant functionality, providing basic intelligent Q&A capabilities. Key features include:
 
-* 提供聊天式交互界面；
-* 支持用户输入问题并展示 AI 返回结果；
-* 支持保留基础对话记录；
-* 对接 DeepSeek Chat 接口；
-* 轻量接入 RAG 知识库，用于结合预置知识内容生成回答。
+- Provide a chat-style interactive interface
+- Support user input of questions and display AI-generated responses
+- Support retention of basic conversation history
+- Integrate with DeepSeek Chat API
+- Lightweight integration with RAG knowledge base to generate responses augmented by predefined knowledge content
 
-#### 3. 设备控制面板
+#### 3. Device Control Panel
 
-用于对系统中的执行设备进行手动控制。主要包括：
+Used for manual control of actuators within the system. Key features include:
 
-* 展示设备列表及当前运行状态；
-* 支持对水泵、增氧机、补光灯、风机等设备进行开启或关闭操作；
-* 支持控制结果反馈显示；
-* 页面风格与整体系统保持统一。
+- Display device list and current operating status
+- Support ON/OFF control for pump, aerator, grow light, and fan
+- Support visual feedback for control execution results
+- Maintain visual consistency with the overall system design
 
-#### 4. 设备管理页面
+#### 4. Device Management Page
 
-用于展示系统设备的基础管理信息。主要包括：
+Used to display basic management information of system devices. Key features include:
 
-* 展示设备名称、设备编号、设备类型、设备状态等信息；
-* 支持查看设备在线状态；
-* 支持查看设备基础描述信息；
-* 用于实现系统设备的基础信息展示与管理。
-
----
-
-### 二、后端接口功能
-
-#### 1. 数据接收接口
-
-用于接收和处理系统运行数据。主要包括：
-
-* 接收来自 MQTT 的环境监测数据；
-* 接收来自 MQTT 的设备状态数据；
-* 对接收到的数据进行解析、处理和存储；
-* 将最新数据推送到前端页面。
-
-#### 2. 实时推送功能
-
-用于实现后端到前端的数据实时更新。主要包括：
-
-* 通过 WebSocket 向监控大屏推送最新环境数据；
-* 通过 WebSocket 向前端推送设备状态变化信息；
-* 通过 WebSocket 向前端推送告警信息。
-
-#### 3. 设备控制接口
-
-用于处理前端发起的设备控制请求。主要包括：
-
-* 接收前端的设备开关控制命令；
-* 更新设备当前状态；
-* 返回控制执行结果；
-* 支持通过 MQTT 发布控制消息。
-
-#### 4. 设备管理接口
-
-用于实现设备信息查询。主要包括：
-
-* 获取设备列表；
-* 获取设备详细信息；
-* 获取设备当前状态信息。
-
-#### 5. 历史数据接口
-
-用于实现历史数据查询与展示。主要包括：
-
-* 查询历史环境监测数据；
-* 查询历史设备状态数据；
-* 支持按时间范围进行基础筛选；
-* 为图表展示提供数据支持。
-
-#### 6. AI 对话接口
-
-用于实现系统 AI 问答能力。主要包括：
-
-* 接收前端用户提问内容；
-* 调用 DeepSeek Chat 接口获取回复；
-* 结合轻量 RAG 知识库进行检索增强；
-* 返回 AI 问答结果给前端页面。
-
-#### 7. 告警处理功能
-
-用于实现基础异常判断与提示。主要包括：
-
-* 对监测数据进行阈值判断；
-* 对异常数据生成告警信息；
-* 将告警结果推送至前端页面；
-* 支持保存基础告警记录。
+- Display device name, device ID, device type, and device status
+- Support viewing device online/offline status
+- Support viewing basic device description information
+- Provide basic information display and management for system devices
 
 ---
 
-### 三、数据模拟器功能
+### II. Backend API Functionality
 
-由于本项目不接入实际硬件，因此需开发独立的数据模拟器模块，由 Python 实现系统运行数据的动态生成与上报。主要包括：
+#### 1. Data Reception Interface
 
-#### 1. 环境数据模拟
+Used to receive and process system operational data. Key features include:
 
-* 动态生成水温、pH、溶解氧、空气温度、空气湿度等监测数据；
-* 支持数据按时间变化进行刷新；
-* 支持设置基础波动范围，使数据表现更贴近实际运行效果。
+- Receive environmental monitoring data via MQTT
+- Receive device status data via MQTT
+- Parse, process, and store received data
+- Push latest data to frontend pages
 
-#### 2. 设备状态模拟
+#### 2. Real-Time Push Functionality
 
-* 模拟水泵、增氧机、补光灯、风机等设备的运行状态；
-* 支持设备状态随控制命令变化而更新；
-* 支持生成设备在线/离线或运行状态变化信息。
+Used to implement real-time data updates from backend to frontend. Key features include:
 
-#### 3. MQTT 数据上报
+- Push latest environmental data to monitoring dashboard via WebSocket
+- Push device status change information to frontend via WebSocket
+- Push alert information to frontend via WebSocket
 
-* 数据模拟器需通过 MQTT 向指定服务器发布数据；
-* 支持发布环境数据主题；
-* 支持发布设备状态主题；
-* 支持按设定时间间隔持续上报。
+#### 3. Device Control Interface
 
-#### 4. 与后端联动
+Used to process device control requests initiated from the frontend. Key features include:
 
-* 数据模拟器上报的数据需能被 Flask 后端正常订阅和处理；
-* 后端可基于模拟器数据完成监控展示、历史记录、告警判断及页面推送。
+- Receive device ON/OFF control commands from frontend
+- Update current device status
+- Return control execution results
+- Support publishing control messages via MQTT
+
+#### 4. Device Management Interface
+
+Used to implement device information queries. Key features include:
+
+- Retrieve device list
+- Retrieve detailed device information
+- Retrieve current device status information
+
+#### 5. Historical Data Interface
+
+Used to implement historical data query and display. Key features include:
+
+- Query historical environmental monitoring data
+- Query historical device status data
+- Support basic filtering by time range
+- Provide data support for chart visualizations
+
+#### 6. AI Dialogue Interface
+
+Used to implement system AI Q&A capabilities. Key features include:
+
+- Receive user questions from frontend
+- Call DeepSeek Chat API to obtain responses
+- Enhance retrieval using lightweight RAG knowledge base
+- Return AI Q&A results to frontend pages
+
+#### 7. Alert Processing Functionality
+
+Used to implement basic anomaly detection and notification. Key features include:
+
+- Perform threshold evaluation on monitoring data
+- Generate alert information for anomalous data
+- Push alert results to frontend pages
+- Support storage of basic alert records
 
 ---
 
-### 四、系统总体要求
+### III. Data Simulator Functionality
 
-1. 系统后端采用 Flask 开发；
-2. 前端页面采用 HTML + CSS + JavaScript 开发，并结合 Bootstrap 5、AdminLTE、ECharts 实现较好的页面展示效果；
-3. 数据通过 MQTT 进行传输，后端接收后通过 WebSocket 实时推送到前端；
-4. 数据库存储采用 MySQL；
-5. 系统需包含监控大屏、AI 对话界面、设备控制面板、设备管理页面四个核心页面；
-6. 系统需轻量接入 RAG 知识库，并通过 DeepSeek Chat 接口实现 AI 对话能力；
-7. 系统整体需保证结构清晰、页面统一、功能完整，可用于演示和验收。
+As this project does not involve physical hardware, an independent data simulator module shall be developed in Python to dynamically generate and report system operational data. Key features include:
 
-## 其他约定
+#### 1. Environmental Data Simulation
 
-1. 无
+- Dynamically generate monitoring data such as water temperature, pH, dissolved oxygen, air temperature, and air humidity
+- Support data refresh over time
+- Support configuration of basic fluctuation ranges to make data behavior more realistic
 
-## 交付内容：
+#### 2. Device Status Simulation
 
-* 完整项目源码
-* 可运行的 Flask Web 项目
-* 前端页面完整代码
-* 数据模拟器模块源码
-* MySQL 数据库脚本
-* 简易操作视频
-* 文档一份，包含设计文档开发文档测试文档
+- Simulate operating status of pump, aerator, grow light, and fan
+- Support device status updates in response to control commands
+- Support generation of device online/offline or operating status change information
+
+#### 3. MQTT Data Reporting
+
+- The data simulator shall publish data to a designated server via MQTT
+- Support publishing to environmental data topics
+- Support publishing to device status topics
+- Support continuous reporting at configurable time intervals
+
+#### 4. Backend Integration
+
+- Data reported by the simulator shall be correctly subscribed to and processed by the Flask backend
+- The backend shall complete monitoring display, historical recording, alert evaluation, and page push based on simulator data
+
+---
+
+### IV. Overall System Requirements
+
+1. The system backend shall be developed using Flask
+2. Frontend pages shall be developed using HTML, CSS, and JavaScript, combined with Bootstrap 5, AdminLTE, and ECharts to achieve a high-quality visual presentation
+3. Data shall be transmitted via MQTT, and the backend shall push data to the frontend in real-time via WebSocket
+4. Database storage shall use MySQL
+5. The system shall include four core pages: Monitoring Dashboard, AI Dialogue Interface, Device Control Panel, and Device Management Page
+6. The system shall integrate a lightweight RAG knowledge base and implement AI dialogue capabilities via the DeepSeek Chat API
+7. The overall system shall maintain clear structure, consistent page design, and complete functionality suitable for demonstration and evaluation
+
 
 

@@ -92,7 +92,7 @@ Used to receive and process system operational data. Key features include:
 
 #### 2. Real-Time Push Functionality
 
-Used to implement real-time data updates from backend to frontend. Key features include:
+Used to implement real-time data updates from backend to frontend. Key features include: 
 
 - Push latest environmental data to monitoring dashboard via WebSocket
 - Push device status change information to frontend via WebSocket

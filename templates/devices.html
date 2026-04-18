@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}设备管理 | {{ project_name }}{% endblock %}
+{% block page_title %}设备管理{% endblock %}
+{% block page_title_breadcrumb %}设备管理{% endblock %}
+{% block content %}
+<!-- 中文注释：设备管理页使用表格和模态框完成设备维护。 -->
+<div class="row">
+    <div class="col-12">
+        <div id="deviceAlert"></div>
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <h3 class="card-title">设备列表</h3>
+                <button type="button" class="btn btn-primary btn-sm ms-auto" id="addDeviceButton">
+                    <i class="fas fa-plus me-1"></i>新增设备
+                </button>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>设备编号</th>
+                            <th>设备名称</th>
+                            <th>类型</th>
+                            <th>数据类型</th>
+                            <th>阈值</th>
+                            <th>在线状态</th>
+                            <th>最新读数</th>
+                            <th>最后上报</th>
+                            <th class="text-end">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="devicesTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deviceDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">设备详情</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="form-control bg-body-tertiary">
+                            <div class="small text-body-secondary">设备编号</div>
+                            <div id="detailCode" class="fw-semibold"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-control bg-body-tertiary">
+                            <div class="small text-body-secondary">设备名称</div>
+                            <div id="detailName" class="fw-semibold"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-control bg-body-tertiary">
+                            <div class="small text-body-secondary">设备类型</div>
+                            <div id="detailType" class="fw-semibold"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-control bg-body-tertiary">
+                            <div class="small text-body-secondary">在线状态</div>
+                            <div id="detailOnline" class="fw-semibold"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-control bg-body-tertiary">
+                            <div class="small text-body-secondary">最新读数</div>
+                            <div id="detailReading" class="fw-semibold"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-control bg-body-tertiary">
+                            <div class="small text-body-secondary">最后上报</div>
+                            <div id="detailReportedAt" class="fw-semibold"></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-control bg-body-tertiary">
+                            <div class="small text-body-secondary">设备说明</div>
+                            <div id="detailDescription" class="fw-semibold"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deviceFormModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="deviceForm">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deviceFormTitle">新增设备</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label" for="deviceCode">设备编号</label>
+                        <input type="text" class="form-control" id="deviceCode" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="deviceName">设备名称</label>
+                        <input type="text" class="form-control" id="deviceName" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="deviceType">设备类型</label>
+                        <input type="text" class="form-control" id="deviceType" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="deviceDataType">数据类型</label>
+                        <select class="form-select" id="deviceDataType">
+                            <option value="numeric">数值型</option>
+                            <option value="switch">开关型</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="deviceUnit">单位</label>
+                        <input type="text" class="form-control" id="deviceUnit">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="thresholdMin">最小阈值</label>
+                        <input type="number" step="0.01" class="form-control" id="thresholdMin">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label" for="thresholdMax">最大阈值</label>
+                        <input type="number" step="0.01" class="form-control" id="thresholdMax">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="deviceDescription">设备说明</label>
+                        <textarea class="form-control" id="deviceDescription" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    // 中文注释：设备管理接口同时承载列表、详情和表单保存。
+    window.DEVICE_ENDPOINTS = {
+        devicesUrl: "{{ url_for('api.devices') }}",
+        detailUrlTemplate: "{{ url_for('api.device_detail', device_code='__DEVICE__') }}"
+    };
+</script>
+<script src="{{ url_for('static', filename='js/devices.js') }}"></script>
+{% endblock %}

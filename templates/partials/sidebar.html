@@ -1,0 +1,57 @@
+{# 中文注释：侧边栏仅使用 AdminLTE/Bootstrap 现成导航结构。 #}
+{% set endpoint = request.endpoint or '' %}
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <div class="sidebar-brand">
+        <a href="{{ url_for('dashboard.dashboard_page') }}" class="brand-link text-decoration-none">
+            <span class="brand-text fw-light">{{ project_name }}</span>
+        </a>
+    </div>
+    <div class="sidebar-wrapper">
+        <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu">
+                <li class="nav-item">
+                    <a href="{{ url_for('dashboard.dashboard_page') }}" class="nav-link {% if endpoint == 'dashboard.dashboard_page' %}active{% endif %}">
+                        <i class="nav-icon fas fa-chart-line"></i>
+                        <p>监控大屏</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('control.control_page') }}" class="nav-link {% if endpoint == 'control.control_page' %}active{% endif %}">
+                        <i class="nav-icon fas fa-toggle-on"></i>
+                        <p>设备控制</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('devices.devices_page') }}" class="nav-link {% if endpoint == 'devices.devices_page' %}active{% endif %}">
+                        <i class="nav-icon fas fa-microchip"></i>
+                        <p>设备管理</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('users.users_page') }}" class="nav-link {% if endpoint == 'users.users_page' %}active{% endif %}">
+                        <i class="nav-icon fas fa-users"></i>
+                        <p>用户管理</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('settings.settings_page') }}" class="nav-link {% if endpoint == 'settings.settings_page' %}active{% endif %}">
+                        <i class="nav-icon fas fa-gear"></i>
+                        <p>系统配置</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('simulator.simulator_page') }}" class="nav-link {% if endpoint == 'simulator.simulator_page' %}active{% endif %}">
+                        <i class="nav-icon fas fa-sliders"></i>
+                        <p>模拟器配置</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ url_for('ai.ai_page') }}" class="nav-link {% if endpoint == 'ai.ai_page' %}active{% endif %}">
+                        <i class="nav-icon fas fa-robot"></i>
+                        <p>AI 对话</p>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</aside>

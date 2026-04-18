@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}用户管理 | {{ project_name }}{% endblock %}
+{% block page_title %}用户管理{% endblock %}
+{% block page_title_breadcrumb %}用户管理{% endblock %}
+{% block content %}
+<!-- 中文注释：用户管理使用表格和模态框完成基础维护。 -->
+<div class="row">
+    <div class="col-12">
+        <div id="userAlert"></div>
+        <div class="card">
+            <div class="card-header d-flex align-items-center">
+                <h3 class="card-title">用户列表</h3>
+                <button type="button" class="btn btn-primary btn-sm ms-auto" id="addUserButton">
+                    <i class="fas fa-plus me-1"></i>新增用户
+                </button>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>用户名</th>
+                            <th>显示名称</th>
+                            <th>创建时间</th>
+                            <th class="text-end">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="userFormModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form class="modal-content" id="userForm">
+            <div class="modal-header">
+                <h5 class="modal-title" id="userFormTitle">新增用户</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="关闭"></button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="userId">
+                <div class="mb-3">
+                    <label class="form-label" for="username">用户名</label>
+                    <input type="text" class="form-control" id="username" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="displayName">显示名称</label>
+                    <input type="text" class="form-control" id="displayName" required>
+                </div>
+                <div class="mb-0">
+                    <label class="form-label" for="password">密码</label>
+                    <input type="password" class="form-control" id="password">
+                    <div class="form-text">新增用户必填；编辑用户时留空表示不修改密码。</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    // 中文注释：用户管理页仅维护无权限区分的登录账号。
+    window.USER_ENDPOINTS = {
+        usersUrl: "{{ url_for('api.users') }}",
+        userUrlTemplate: "{{ url_for('api.user_detail', user_id=0) }}".replace("0", "__USER__")
+    };
+</script>
+<script src="{{ url_for('static', filename='js/users.js') }}"></script>
+{% endblock %}

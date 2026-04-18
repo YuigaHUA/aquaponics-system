@@ -1,0 +1,100 @@
+/* 中文注释：仅补充业务必须样式，不重写框架基础能力。 */
+#historyChart {
+    min-height: 360px;
+}
+
+.direct-chat-messages {
+    height: 360px;
+}
+
+.ai-page-row,
+.ai-page-column,
+.ai-chat-card {
+    min-height: calc(100vh - 220px);
+}
+
+.ai-chat-card {
+    display: flex;
+    flex-direction: column;
+}
+
+.ai-chat-card .card-body {
+    display: flex;
+    flex: 1 1 auto;
+    min-height: 0;
+}
+
+.ai-chat-card .direct-chat-messages {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 420px;
+    width: 100%;
+}
+
+.app-footer {
+    padding: 0.75rem 1rem;
+}
+
+.ai-markdown {
+    line-height: 1.6;
+}
+
+.ai-markdown p,
+.ai-markdown ul,
+.ai-markdown ol,
+.ai-markdown pre {
+    margin-bottom: 0.5rem;
+}
+
+.ai-markdown p:last-child,
+.ai-markdown ul:last-child,
+.ai-markdown ol:last-child,
+.ai-markdown pre:last-child {
+    margin-bottom: 0;
+}
+
+.ai-markdown ul,
+.ai-markdown ol {
+    padding-left: 1.25rem;
+}
+
+.ai-markdown h1,
+.ai-markdown h2,
+.ai-markdown h3,
+.ai-markdown h4 {
+    font-weight: 600;
+    margin: 0.65rem 0 0.35rem;
+}
+
+.ai-markdown h1 {
+    font-size: 1.25rem;
+}
+
+.ai-markdown h2 {
+    font-size: 1.15rem;
+}
+
+.ai-markdown h3,
+.ai-markdown h4 {
+    font-size: 1.05rem;
+}
+
+.ai-markdown code {
+    background: rgba(0, 0, 0, 0.08);
+    border-radius: 4px;
+    padding: 0.1rem 0.25rem;
+}
+
+.ai-markdown pre {
+    background: #212529;
+    border-radius: 6px;
+    color: #f8f9fa;
+    overflow-x: auto;
+    padding: 0.75rem;
+}
+
+.ai-markdown pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+}

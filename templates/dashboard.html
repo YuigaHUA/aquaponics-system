@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}监控大屏 | {{ project_name }}{% endblock %}
+{% block page_title %}监控大屏{% endblock %}
+{% block page_title_breadcrumb %}监控大屏{% endblock %}
+{% block content %}
+<!-- 中文注释：页面组件全部由 AdminLTE 卡片、表格、徽章和 Bootstrap 栅格拼接。 -->
+<div class="row" id="metricCards"></div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">设备趋势</h3>
+                <div class="card-tools d-flex align-items-center gap-2">
+                    <select id="historyMetricSelect" class="form-select form-select-sm"></select>
+                    <span class="badge text-bg-light" id="dashboardUpdatedAt">等待数据</span>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="historyChart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">系统概况</h3>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <div class="info-box">
+                            <span class="info-box-icon text-bg-primary"><i class="fas fa-microchip"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">设备总数</span>
+                                <span class="info-box-number" id="statDeviceTotal">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-box">
+                            <span class="info-box-icon text-bg-success"><i class="fas fa-wifi"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">在线设备</span>
+                                <span class="info-box-number" id="statDeviceOnline">0</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="info-box">
+                            <span class="info-box-icon text-bg-danger"><i class="fas fa-triangle-exclamation"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">活动告警</span>
+                                <span class="info-box-number" id="statAlarmTotal">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">设备状态</h3>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush" id="deviceStatusList"></ul>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">活动告警</h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-striped align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>指标</th>
+                            <th>告警内容</th>
+                            <th>阈值</th>
+                            <th>触发时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="alarmTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">最近控制记录</h3>
+            </div>
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead>
+                        <tr>
+                            <th>命令编号</th>
+                            <th>设备</th>
+                            <th>动作</th>
+                            <th>状态</th>
+                            <th>说明</th>
+                            <th>发起时间</th>
+                        </tr>
+                    </thead>
+                    <tbody id="commandTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    // 中文注释：页面脚本只接业务接口和实时事件。
+    window.DASHBOARD_ENDPOINTS = {
+        summaryUrl: "{{ url_for('api.dashboard_summary') }}",
+        historyUrl: "{{ url_for('api.environment_history') }}",
+        alarmsUrl: "{{ url_for('api.active_alarms') }}"
+    };
+</script>
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

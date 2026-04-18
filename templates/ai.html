@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}AI 对话 | {{ project_name }}{% endblock %}
+{% block page_title %}AI 对话{% endblock %}
+{% block page_title_breadcrumb %}AI 对话{% endblock %}
+{% block content %}
+<!-- 中文注释：AI 页面提供 DeepSeek 对话入口，并注入实时设备状态上下文。 -->
+<div class="row">
+    <div class="col-12">
+        <div class="alert alert-info mb-3" role="alert">
+            可询问设备数量、当前读数、在线状态和告警情况。DeepSeek API Key 请在系统配置中维护。
+        </div>
+    </div>
+</div>
+
+<div class="row ai-page-row">
+    <div class="col-12 ai-page-column">
+        <div class="card card-primary card-outline direct-chat direct-chat-primary ai-chat-card">
+            <div class="card-header">
+                <h3 class="card-title">AI 助手</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" id="clearAiHistoryButton">清空记录</button>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="direct-chat-messages" id="aiMessages"></div>
+            </div>
+            <div class="card-footer">
+                <form id="aiChatForm">
+                    <div class="input-group">
+                        <input type="text" id="aiMessageInput" class="form-control" placeholder="请输入问题" autocomplete="off">
+                        <button type="submit" class="btn btn-primary" id="aiSubmitButton">发送</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    // 中文注释：AI 接口会调用 DeepSeek，并携带当前设备状态上下文。
+    window.AI_ENDPOINTS = {
+        chatUrl: "{{ url_for('api.ai_chat') }}",
+        streamChatUrl: "{{ url_for('api.ai_chat_stream') }}",
+        historyUrl: "{{ url_for('api.ai_history') }}"
+    };
+</script>
+<script src="{{ url_for('static', filename='js/ai.js') }}"></script>
+{% endblock %}

@@ -215,7 +215,7 @@ The default MQTT address is 127.0.0.1:1883. Please ensure that the local MQTT Br
 
 After adding or deleting devices, or saving simulator configuration, the main application will automatically restart the built-in data simulator.
 
-python .\simulator\run_simulator.py is retained only as a debugging entry point and does not need to be executed for daily operation.
+python .\simulator\run_simulator.py is retained only as a debugging entry point and does not need to be executed for daily operation. 
 
 Testing
 python -m unittest tests.test_app -v

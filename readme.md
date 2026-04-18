@@ -182,7 +182,43 @@ As this project does not involve physical hardware, an independent data simulato
 4. Database storage shall use MySQL
 5. The system shall include four core pages: Monitoring Dashboard, AI Dialogue Interface, Device Control Panel, and Device Management Page
 6. The system shall integrate a lightweight RAG knowledge base and implement AI dialogue capabilities via the DeepSeek Chat API
-7. The overall system shall maintain clear structure, consistent page design, and complete functionality suitable for demonstration and evaluation
+7. The overall system shall maintain clear structure, consistent page design, and complete functionality suitable for demonstration and evaluationInitialize MySQL
+powershell
+mysql -uroot -p < .\sql\mysql_init.sql
+Project configuration is already written directly in the code:
+
+Flask main application configuration file: config\config.py
+
+Simulator configuration file: simulator\config.py
+
+If you need to change the host, port, database account, MQTT address, or default administrator account, edit these two configuration files directly.
+
+If PyMySQL is not installed on the current machine, the project will automatically fall back to instance\aquaponics_demo.db as a local development database. For formal integration testing with MySQL, please install PyMySQL first.
+
+3. Start Flask Application
+powershell
+python .\run.py
+Default access URL: http://127.0.0.1:5000
+
+Default account:
+
+Username: admin
+
+Password: 123456
+
+4. Data Simulator
+The data simulator is already started together with the Flask main application and does not need to be run separately. The simulator still reports device data to the backend via MQTT and receives control commands.
+
+Note:
+
+The default MQTT address is 127.0.0.1:1883. Please ensure that the local MQTT Broker is already running.
+
+After adding or deleting devices, or saving simulator configuration, the main application will automatically restart the built-in data simulator.
+
+python .\simulator\run_simulator.py is retained only as a debugging entry point and does not need to be executed for daily operation.
+
+Testing
+python -m unittest tests.test_app -v
 
 
 

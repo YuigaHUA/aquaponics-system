@@ -1,9 +1,9 @@
 {% extends "base.html" %}
-{% block title %}设备控制 | {{ project_name }}{% endblock %}
-{% block page_title %}设备控制{% endblock %}
-{% block page_title_breadcrumb %}设备控制{% endblock %}
+{% block title %}Device Control | {{ project_name }}{% endblock %}
+{% block page_title %}Device Control{% endblock %}
+{% block page_title_breadcrumb %}Device Control{% endblock %}
 {% block content %}
-<!-- 中文注释：控制页复用卡片、按钮组、告警条和表格，不新建自定义控件。 -->
+<!-- Control page reuses cards, buttons, alert bars and tables. -->
 <div class="row">
     <div class="col-12">
         <div id="controlAlert"></div>
@@ -16,19 +16,19 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">最近控制记录</h3>
+                <h3 class="card-title">Recent Control Records</h3>
             </div>
             <div class="card-body table-responsive p-0">
                 <table class="table table-striped align-middle mb-0">
                     <thead>
                         <tr>
-                            <th>命令编号</th>
-                            <th>设备</th>
-                            <th>动作</th>
-                            <th>状态</th>
-                            <th>说明</th>
-                            <th>发起时间</th>
-                            <th>回执时间</th>
+                            <th>Command ID</th>
+                            <th>Device</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>Description</th>
+                            <th>Issued Time</th>
+                            <th>Acknowledged Time</th>
                         </tr>
                     </thead>
                     <tbody id="controlCommandTableBody"></tbody>
@@ -40,8 +40,8 @@
 {% endblock %}
 {% block scripts %}
 <script>
-    // 中文注释：控制页通过现成按钮发起命令，不做自定义组件封装。
-    window.CONTROL_ENDPOINTS = {
+    // Control page uses existing buttons to send commands.
+    globalThis.CONTROL_ENDPOINTS = {
         devicesUrl: "{{ url_for('api.devices') }}",
         commandsUrl: "{{ url_for('api.recent_commands') }}",
         controlUrlTemplate: "{{ url_for('api.control_device', device_code='__DEVICE__') }}"

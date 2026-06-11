@@ -1,9 +1,9 @@
-// 中文注释：设备页负责展示表格、详情和设备维护表单。
+// Device page displays tables, details and device maintenance forms.
 (function () {
-    const endpoints = window.DEVICE_ENDPOINTS;
-    const api = window.AppApi;
-    const utils = window.AppUtils;
-    const socket = window.AppSocket;
+    const endpoints = globalThis.DEVICE_ENDPOINTS;
+    const api = globalThis.AppApi;
+    const utils = globalThis.AppUtils;
+    const socket = globalThis.AppSocket;
 
     const alertContainer = document.getElementById("deviceAlert");
     const tableBody = document.getElementById("devicesTableBody");
@@ -37,7 +37,7 @@
         alertContainer.innerHTML = `
             <div class="alert alert-${level} alert-dismissible fade show" role="alert">
                 ${utils.escapeHtml(message)}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
     }
@@ -58,7 +58,7 @@
         formFields.description.value = device ? device.description : "";
         formFields.code.disabled = Boolean(device);
         toggleThresholdFields();
-        formTitle.textContent = device ? "编辑设备" : "新增设备";
+        formTitle.textContent = device ? "Edit Device" : "Add Device";
         formModal.show();
     }
 
@@ -93,10 +93,10 @@
             return "--";
         }
         if (!reading.online) {
-            return "离线";
+            return "Offline";
         }
         if (item.data_type === "switch") {
-            return reading.switch_value === "on" ? "开启" : "关闭";
+            return reading.switch_value === "on" ? "On" : "Off";
         }
         if (reading.numeric_value === null || reading.numeric_value === undefined) {
             return "--";
@@ -117,7 +117,7 @@
         if (item.threshold_max !== null) {
             return `<= ${item.threshold_max} ${item.unit || ""}`.trim();
         }
-        return "未设置";
+        return "Not set";
     }
 
     async function showDetail(deviceCode) {
@@ -125,7 +125,7 @@
         fields.code.textContent = detail.code || "--";
         fields.name.textContent = detail.name || "--";
         fields.type.textContent = detail.device_type || "--";
-        fields.online.textContent = detail.online ? "在线" : "离线";
+        fields.online.textContent = detail.online ? "Online" : "Offline";
         fields.reading.textContent = formatReading(detail);
         fields.reportedAt.textContent = utils.formatDateTime(detail.last_reported_at);
         fields.description.textContent = detail.description || "--";
@@ -134,7 +134,7 @@
 
     function renderTable(items) {
         if (!items || !items.length) {
-            tableBody.innerHTML = '<tr><td colspan="9" class="text-center text-body-secondary">暂无设备数据</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="9" class="text-center text-body-secondary">No device data available</td></tr>';
             return;
         }
 
@@ -143,16 +143,16 @@
                 <td>${utils.escapeHtml(item.code)}</td>
                 <td>${utils.escapeHtml(item.name)}</td>
                 <td>${utils.escapeHtml(item.device_type)}</td>
-                <td>${item.data_type === 'numeric' ? '数值型' : '开关型'}</td>
+                <td>${item.data_type === 'numeric' ? 'Numeric' : 'Switch'}</td>
                 <td>${utils.escapeHtml(formatThreshold(item))}</td>
-                <td><span class="badge ${item.online ? 'text-bg-success' : 'text-bg-secondary'}">${item.online ? '在线' : '离线'}</span></td>
+                <td><span class="badge ${item.online ? 'text-bg-success' : 'text-bg-secondary'}">${item.online ? 'Online' : 'Offline'}</span></td>
                 <td>${utils.escapeHtml(formatReading(item))}</td>
                 <td>${utils.formatDateTime(item.last_reported_at)}</td>
                 <td class="text-end">
                     <div class="btn-group btn-group-sm">
-                        <button type="button" class="btn btn-outline-primary" data-view-device="${utils.escapeHtml(item.code)}">详情</button>
-                        <button type="button" class="btn btn-outline-secondary" data-edit-device="${utils.escapeHtml(item.code)}">编辑</button>
-                        <button type="button" class="btn btn-outline-danger" data-delete-device="${utils.escapeHtml(item.code)}">删除</button>
+                        <button type="button" class="btn btn-outline-primary" data-view-device="${utils.escapeHtml(item.code)}">Details</button>
+                        <button type="button" class="btn btn-outline-secondary" data-edit-device="${utils.escapeHtml(item.code)}">Edit</button>
+                        <button type="button" class="btn btn-outline-danger" data-delete-device="${utils.escapeHtml(item.code)}">Delete</button>
                     </div>
                 </td>
             </tr>
@@ -171,12 +171,12 @@
         });
         tableBody.querySelectorAll("[data-delete-device]").forEach((button) => {
             button.addEventListener("click", async function () {
-                if (!window.confirm("确认删除该设备吗？相关状态和命令记录也会删除。")) {
+                if (!window.confirm("Are you sure you want to delete this device? Related status and command records will also be deleted.")) {
                     return;
                 }
                 try {
                     await api.deleteJson(deviceUrl(button.dataset.deleteDevice));
-                    showAlert("设备已删除", "success");
+                    showAlert("Device deleted", "success");
                     await loadDevices();
                 } catch (error) {
                     showAlert(error.message, "danger");
@@ -202,10 +202,10 @@
         try {
             if (formFields.code.disabled) {
                 await api.putJson(deviceUrl(formFields.code.value), payload);
-                showAlert("设备已更新", "success");
+                showAlert("Device updated", "success");
             } else {
                 await api.postJson(endpoints.devicesUrl, payload);
-                showAlert("设备已创建", "success");
+                showAlert("Device created", "success");
             }
             formModal.hide();
             await loadDevices();

@@ -1,4 +1,4 @@
-// 中文注释：控制页只拼装框架卡片和按钮，并调用后端控制接口。
+// Control page assembles framework cards and buttons, calls backend control API.
 (function () {
     const endpoints = window.CONTROL_ENDPOINTS;
     const api = window.AppApi;
@@ -11,12 +11,12 @@
 
     function statusText(value) {
         if (value === "success") {
-            return "执行成功";
+            return "Success";
         }
         if (value === "failed") {
-            return "执行失败";
+            return "Failed";
         }
-        return "等待回执";
+        return "Waiting";
     }
 
     function statusClass(value) {
@@ -33,7 +33,7 @@
         alertContainer.innerHTML = `
             <div class="alert alert-${level} alert-dismissible fade show" role="alert">
                 ${utils.escapeHtml(message)}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
     }
@@ -41,15 +41,15 @@
     function readingText(item) {
         const reading = item.latest_reading;
         if (!reading || !reading.online) {
-            return "离线";
+            return "Offline";
         }
-        return reading.switch_value === "on" ? "开启" : "关闭";
+        return reading.switch_value === "on" ? "On" : "Off";
     }
 
     function renderDevices(items) {
         const switchDevices = (items || []).filter((item) => item.data_type === "switch");
         if (!switchDevices.length) {
-            deviceCards.innerHTML = '<div class="col-12"><div class="alert alert-info">暂无可控制的开关型设备</div></div>';
+            deviceCards.innerHTML = '<div class="col-12"><div class="alert alert-info">No switch devices available for control</div></div>';
             return;
         }
         deviceCards.innerHTML = switchDevices.map((item) => `
@@ -58,15 +58,15 @@
                     <div class="card-header">
                         <h3 class="card-title">${utils.escapeHtml(item.name)}</h3>
                         <div class="card-tools d-flex gap-2">
-                            <span class="badge ${item.online ? 'text-bg-success' : 'text-bg-secondary'}">${item.online ? '在线' : '离线'}</span>
+                            <span class="badge ${item.online ? 'text-bg-success' : 'text-bg-secondary'}">${item.online ? 'Online' : 'Offline'}</span>
                         </div>
                     </div>
                     <div class="card-body">
                         <p class="text-body-secondary small mb-3">${utils.escapeHtml(item.description || '')}</p>
-                        <p class="fw-semibold">当前状态：${readingText(item)}</p>
+                        <p class="fw-semibold">Current Status: ${readingText(item)}</p>
                         <div class="btn-group w-100" role="group">
-                            <button type="button" class="btn btn-success" data-action="on" data-device="${utils.escapeHtml(item.code)}" ${item.online ? '' : 'disabled'}>开启</button>
-                            <button type="button" class="btn btn-outline-secondary" data-action="off" data-device="${utils.escapeHtml(item.code)}" ${item.online ? '' : 'disabled'}>关闭</button>
+                            <button type="button" class="btn btn-success" data-action="on" data-device="${utils.escapeHtml(item.code)}" ${item.online ? '' : 'disabled'}>On</button>
+                            <button type="button" class="btn btn-outline-secondary" data-action="off" data-device="${utils.escapeHtml(item.code)}" ${item.online ? '' : 'disabled'}>Off</button>
                         </div>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                 const url = endpoints.controlUrlTemplate.replace("__DEVICE__", deviceCode);
                 try {
                     const data = await api.postJson(url, { action });
-                    showAlert(`${deviceCode}：${data.message}`, data.status === "failed" ? "danger" : "success");
+                    showAlert(`${deviceCode}: ${data.message}`, data.status === "failed" ? "danger" : "success");
                     loadCommands();
                 } catch (error) {
                     showAlert(error.message, "danger");
@@ -91,14 +91,14 @@
 
     function renderCommands(items) {
         if (!items || !items.length) {
-            commandTableBody.innerHTML = '<tr><td colspan="7" class="text-center text-body-secondary">暂无控制记录</td></tr>';
+            commandTableBody.innerHTML = '<tr><td colspan="7" class="text-center text-body-secondary">No control records</td></tr>';
             return;
         }
         commandTableBody.innerHTML = items.map((item) => `
             <tr>
                 <td class="small">${utils.escapeHtml(item.command_id)}</td>
                 <td>${utils.escapeHtml(item.device_code)}</td>
-                <td>${item.action === 'on' ? '开启' : '关闭'}</td>
+                <td>${item.action === 'on' ? 'On' : 'Off'}</td>
                 <td><span class="badge ${statusClass(item.status)}">${statusText(item.status)}</span></td>
                 <td>${utils.escapeHtml(item.message || '')}</td>
                 <td>${utils.formatDateTime(item.issued_at)}</td>
@@ -122,9 +122,9 @@
         socket.on("command_feedback", function (payload) {
             const command = payload.command || {};
             if (command.status === "success") {
-                showAlert(`${command.device_code} 执行成功：${command.message}`, "success");
+                showAlert(`${command.device_code} executed successfully: ${command.message}`, "success");
             } else if (command.status === "failed") {
-                showAlert(`${command.device_code} 执行失败：${command.message}`, "danger");
+                showAlert(`${command.device_code} execution failed: ${command.message}`, "danger");
             }
             loadCommands();
             loadDevices();

@@ -1,4 +1,4 @@
-// 中文注释：监控页只负责渲染现有卡片、表格与图表内容。
+// Dashboard page only renders existing cards, tables and chart content.
 (function () {
     const endpoints = window.DASHBOARD_ENDPOINTS;
     const utils = window.AppUtils;
@@ -59,10 +59,10 @@
             return "--";
         }
         if (!reading.online) {
-            return "离线";
+            return "Offline";
         }
         if (item.data_type === "switch") {
-            return reading.switch_value === "on" ? "开启" : "关闭";
+            return reading.switch_value === "on" ? "On" : "Off";
         }
         if (reading.numeric_value === null || reading.numeric_value === undefined) {
             return "--";
@@ -72,7 +72,7 @@
 
     function renderDevices(items) {
         if (!items || !items.length) {
-            deviceStatusList.innerHTML = '<li class="list-group-item text-body-secondary">暂无设备数据</li>';
+            deviceStatusList.innerHTML = '<li class="list-group-item text-body-secondary">No device data available</li>';
             return;
         }
         deviceStatusList.innerHTML = items.map((item) => `
@@ -83,7 +83,7 @@
                             <div class="text-body-secondary small">${utils.escapeHtml(deviceReadingText(item))}</div>
                     </div>
                     <div class="d-flex gap-2">
-                        <span class="badge ${item.online ? 'text-bg-success' : 'text-bg-secondary'}">${item.online ? '在线' : '离线'}</span>
+                        <span class="badge ${item.online ? 'text-bg-success' : 'text-bg-secondary'}">${item.online ? 'Online' : 'Offline'}</span>
                     </div>
                 </div>
             </li>
@@ -92,7 +92,7 @@
 
     function renderAlarms(items) {
         if (!items || !items.length) {
-            alarmTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-body-secondary">当前无活动告警</td></tr>';
+            alarmTableBody.innerHTML = '<tr><td colspan="4" class="text-center text-body-secondary">No active alarms</td></tr>';
             return;
         }
         alarmTableBody.innerHTML = items.map((item) => `
@@ -107,14 +107,14 @@
 
     function renderCommands(items) {
         if (!items || !items.length) {
-            commandTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-body-secondary">暂无控制记录</td></tr>';
+            commandTableBody.innerHTML = '<tr><td colspan="6" class="text-center text-body-secondary">No control records</td></tr>';
             return;
         }
         commandTableBody.innerHTML = items.map((item) => `
             <tr>
                 <td class="small">${utils.escapeHtml(item.command_id)}</td>
                 <td>${utils.escapeHtml(item.device_code)}</td>
-                <td>${item.action === 'on' ? '开启' : '关闭'}</td>
+                <td>${item.action === 'on' ? 'On' : 'Off'}</td>
                 <td><span class="badge ${item.status === 'success' ? 'text-bg-success' : item.status === 'failed' ? 'text-bg-danger' : 'text-bg-warning'}">${utils.escapeHtml(item.status)}</span></td>
                 <td>${utils.escapeHtml(item.message || '')}</td>
                 <td>${utils.formatDateTime(item.issued_at)}</td>
@@ -127,7 +127,7 @@
         statDeviceTotal.textContent = totals.total || 0;
         statDeviceOnline.textContent = totals.online || 0;
         statAlarmTotal.textContent = totals.alarms || 0;
-        updatedAt.textContent = `最近刷新：${utils.formatDateTime(summary.generated_at)}`;
+        updatedAt.textContent = `Last updated: ${utils.formatDateTime(summary.generated_at)}`;
     }
 
     function renderSummary(summary) {
@@ -152,7 +152,7 @@
             ensureChart().clear();
             ensureChart().setOption({
                 title: {
-                    text: "暂无数值型设备可查看趋势",
+                    text: "No numeric devices available to view trends",
                     left: "center",
                     top: "middle",
                     textStyle: { color: "#6c757d", fontSize: 16 },

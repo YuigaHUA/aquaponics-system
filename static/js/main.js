@@ -1,4 +1,4 @@
-// 中文注释：统一放置轻量业务工具和全局格式化逻辑。
+// Lightweight business utilities and global formatting logic.
 (function () {
     function formatDateTime(value) {
         if (!value) {
@@ -8,7 +8,7 @@
         if (Number.isNaN(date.getTime())) {
             return value;
         }
-        return new Intl.DateTimeFormat("zh-CN", {
+        return new Intl.DateTimeFormat("en-US", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
@@ -35,7 +35,7 @@
         });
         const payload = await response.json();
         if (!response.ok || payload.code !== 0) {
-            throw new Error(payload.error || payload.message || "请求失败");
+            throw new Error(payload.error || payload.message || "Request failed");
         }
         return payload.data;
     }
@@ -51,7 +51,7 @@
         });
         const payload = await response.json();
         if (!response.ok || payload.code !== 0) {
-            throw new Error(payload.error || payload.message || "请求失败");
+            throw new Error(payload.error || payload.message || "Request failed");
         }
         return payload.data;
     }
@@ -67,7 +67,7 @@
         });
         const payload = await response.json();
         if (!response.ok || payload.code !== 0) {
-            throw new Error(payload.error || payload.message || "请求失败");
+            throw new Error(payload.error || payload.message || "Request failed");
         }
         return payload.data;
     }
@@ -81,7 +81,7 @@
         });
         const payload = await response.json();
         if (!response.ok || payload.code !== 0) {
-            throw new Error(payload.error || payload.message || "请求失败");
+            throw new Error(payload.error || payload.message || "Request failed");
         }
         return payload.data;
     }

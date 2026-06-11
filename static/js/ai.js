@@ -1,19 +1,19 @@
-// 中文注释：AI 页负责提交问题、展示 Markdown 回复并维护聊天历史。
+// AI page handles question submission, Markdown reply display and chat history.
 (function () {
-    const endpoints = window.AI_ENDPOINTS;
-    const api = window.AppApi;
-    const utils = window.AppUtils;
+    const endpoints = globalThis.AI_ENDPOINTS;
+    const api = globalThis.AppApi;
+    const utils = globalThis.AppUtils;
     const form = document.getElementById("aiChatForm");
     const input = document.getElementById("aiMessageInput");
     const submitButton = document.getElementById("aiSubmitButton");
     const clearButton = document.getElementById("clearAiHistoryButton");
     const messages = document.getElementById("aiMessages");
-    const welcomeText = "可以询问：我有几个设备？每个设备当前是什么值？哪些设备离线？";
+    const welcomeText = "You can ask: How many devices do I have? What is the current value of each device? Which devices are offline?";
 
     function formatInline(text) {
         let html = utils.escapeHtml(text);
-        html = html.replace(/`([^`]+)`/g, "<code>$1</code>");
-        html = html.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        html = html.replaceAll(/`([^`]+)`/g, "<code>$1</code>");
+        html = html.replaceAll(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
         return html;
     }
 
@@ -26,7 +26,7 @@
     }
 
     function renderMarkdown(message) {
-        const lines = String(message ?? "").replace(/\r\n/g, "\n").split("\n");
+        const lines = String(message ?? "").replaceAll('\r\n', "\n").split("\n");
         const output = [];
         const listState = { type: null };
         let paragraph = [];
@@ -134,13 +134,13 @@
     }
 
     function appendWelcome() {
-        appendMessage("left", "系统", welcomeText, utils.formatDateTime(new Date()), "text");
+        appendMessage("left", "System", welcomeText, utils.formatDateTime(new Date()), "text");
     }
 
     function setLoading(isLoading) {
         input.disabled = isLoading;
         submitButton.disabled = isLoading;
-        submitButton.textContent = isLoading ? "正在思考..." : "发送";
+        submitButton.textContent = isLoading ? "Thinking..." : "Send";
     }
 
     async function loadHistory() {
@@ -155,14 +155,14 @@
                 const isUser = item.role === "user";
                 appendMessage(
                     isUser ? "right" : "left",
-                    isUser ? "我" : "AI 助手",
+                    isUser ? "Me" : "AI Assistant",
                     item.content,
                     utils.formatDateTime(item.created_at),
                     isUser ? "text" : "markdown",
                 );
             });
         } catch (error) {
-            appendMessage("left", "系统", error.message, utils.formatDateTime(new Date()), "text");
+            appendMessage("left", "System", error.message, utils.formatDateTime(new Date()), "text");
         }
     }
 
@@ -182,14 +182,14 @@
         try {
             event.payload = JSON.parse(event.data);
         } catch (error) {
-            event.payload = { message: "AI 流式响应格式异常。" };
+            event.payload = { message: "AI streaming response format error." };
         }
         return event;
     }
 
     async function submitNormalChat(value) {
         const data = await api.postJson(endpoints.chatUrl, { message: value });
-        appendMessage("left", "AI 助手", data.reply, utils.formatDateTime(new Date()), "markdown");
+        appendMessage("left", "AI Assistant", data.reply, utils.formatDateTime(new Date()), "markdown");
     }
 
     async function submitStreamChat(value) {
@@ -198,7 +198,7 @@
             return;
         }
 
-        const aiContent = appendMessage("left", "AI 助手", "", utils.formatDateTime(new Date()), "markdown");
+        const aiContent = appendMessage("left", "AI Assistant", "", utils.formatDateTime(new Date()), "markdown");
         const response = await fetch(endpoints.streamChatUrl, {
             method: "POST",
             headers: {
@@ -208,7 +208,7 @@
             body: JSON.stringify({ message: value }),
         });
         if (!response.ok || !response.body) {
-            throw new Error("AI 流式请求失败。");
+            throw new Error("AI streaming request failed.");
         }
 
         const reader = response.body.getReader();
@@ -236,7 +236,7 @@
                     finished = true;
                 }
                 if (event.name === "error") {
-                    const message = event.payload.message || "AI 对话失败。";
+                    const message = event.payload.message || "AI chat failed.";
                     updateMessage(aiContent, message, "text");
                     const error = new Error(message);
                     error.handledInMessage = true;
@@ -248,7 +248,7 @@
         if (buffer.trim()) {
             const event = parseSsePacket(buffer);
             if (event.name === "error") {
-                const message = event.payload.message || "AI 对话失败。";
+                const message = event.payload.message || "AI chat failed.";
                 updateMessage(aiContent, message, "text");
                 const error = new Error(message);
                 error.handledInMessage = true;
@@ -256,7 +256,7 @@
             }
         }
         if (!reply) {
-            updateMessage(aiContent, "AI 没有返回内容。", "text");
+            updateMessage(aiContent, "AI returned no content.", "text");
         }
     }
 
@@ -267,7 +267,7 @@
             return;
         }
 
-        appendMessage("right", "我", value, utils.formatDateTime(new Date()), "text");
+        appendMessage("right", "Me", value, utils.formatDateTime(new Date()), "text");
         input.value = "";
 
         try {
@@ -275,7 +275,7 @@
             await submitStreamChat(value);
         } catch (error) {
             if (!error.handledInMessage) {
-                appendMessage("left", "系统", error.message, utils.formatDateTime(new Date()), "text");
+                appendMessage("left", "System", error.message, utils.formatDateTime(new Date()), "text");
             }
         } finally {
             setLoading(false);
@@ -289,7 +289,7 @@
             messages.innerHTML = "";
             appendWelcome();
         } catch (error) {
-            appendMessage("left", "系统", error.message, utils.formatDateTime(new Date()), "text");
+            appendMessage("left", "System", error.message, utils.formatDateTime(new Date()), "text");
         }
     });
 

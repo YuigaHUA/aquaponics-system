@@ -1,25 +1,25 @@
 {% extends "base.html" %}
-{% block title %}系统配置 | {{ project_name }}{% endblock %}
-{% block page_title %}系统配置{% endblock %}
-{% block page_title_breadcrumb %}系统配置{% endblock %}
+{% block title %}Settings | {{ project_name }}{% endblock %}
+{% block page_title %}Settings{% endblock %}
+{% block page_title_breadcrumb %}Settings{% endblock %}
 {% block content %}
-<!-- 中文注释：系统配置保存到数据库，部分运行参数需要重启后生效。 -->
+<!-- System settings are saved to database; some runtime parameters require restart to take effect. -->
 <div class="row">
     <div class="col-12">
         <div id="settingsAlert"></div>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">配置项</h3>
+                <h3 class="card-title">Configuration Items</h3>
             </div>
             <form id="settingsForm">
                 <div class="card-body">
                     <div class="alert alert-info mb-3">
-                        保存后会持久化到数据库；MQTT 和模拟器相关配置需重启对应进程后生效。
+                        Settings are persisted to database; MQTT and simulator related configs require restart to take effect.
                     </div>
                     <div class="row g-3" id="settingsFields"></div>
                 </div>
                 <div class="card-footer text-end">
-                    <button type="submit" class="btn btn-primary">保存配置</button>
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
                 </div>
             </form>
         </div>
@@ -28,8 +28,8 @@
 {% endblock %}
 {% block scripts %}
 <script>
-    // 中文注释：配置接口统一返回已掩码的密钥字段。
-    window.SETTINGS_ENDPOINTS = {
+    // Config API returns masked secret fields.
+    globalThis.SETTINGS_ENDPOINTS = {
         configsUrl: "{{ url_for('api.system_configs') }}"
     };
 </script>

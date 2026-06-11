@@ -1,4 +1,4 @@
-// 中文注释：系统配置页负责渲染固定配置项并保存到后端。
+// System settings page renders fixed config items and saves to backend.
 (function () {
     const endpoints = window.SETTINGS_ENDPOINTS;
     const api = window.AppApi;
@@ -12,7 +12,7 @@
         alertContainer.innerHTML = `
             <div class="alert alert-${level} alert-dismissible fade show" role="alert">
                 ${utils.escapeHtml(message)}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
     }
@@ -21,10 +21,10 @@
         fieldsContainer.innerHTML = (items || []).map((item) => {
             const type = item.is_secret ? "password" : "text";
             const value = item.is_secret ? "" : item.value;
-            const placeholder = item.is_secret && item.value ? "已保存，留空表示不修改" : "";
+            const placeholder = item.is_secret && item.value ? "Saved, leave blank to keep unchanged" : "";
             return `
                 <div class="col-md-6">
-                    <label class="form-label" for="config_${utils.escapeHtml(item.key)}">${utils.escapeHtml(item.label)}</label>
+                    <label class="form-label" for="config_${utils.escapeHtml(item.key)}"> ${utils.escapeHtml(item.label)}</label>
                     <input type="${type}" class="form-control" id="config_${utils.escapeHtml(item.key)}"
                            name="${utils.escapeHtml(item.key)}" value="${utils.escapeHtml(value)}"
                            placeholder="${utils.escapeHtml(placeholder)}">
@@ -48,7 +48,7 @@
         try {
             const data = await api.putJson(endpoints.configsUrl, payload);
             renderFields(data);
-            showAlert("系统配置已保存，部分配置需重启后生效。", "success");
+            showAlert("Settings saved. Some settings require restart to take effect.", "success");
         } catch (error) {
             showAlert(error.message, "danger");
         }

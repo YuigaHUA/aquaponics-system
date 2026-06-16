@@ -10,7 +10,7 @@ socketio = SocketIO()
 
 
 def redirect_to_login():
-    """中文注释：未登录页面请求统一跳转到登录页。"""
+    """未登录页面请求统一跳转到登录页。"""
     from flask import redirect, url_for
 
     return redirect(url_for("auth.login"))
@@ -29,7 +29,7 @@ def create_app(config_name="default"):
     db.init_app(app)
     login_manager.init_app(app)
     login_manager.login_view = "auth.login"
-    login_manager.login_message = "请先登录系统。"
+    login_manager.login_message = "Please login first."
     login_manager.login_message_category = "warning"
     socketio.init_app(
         app,
@@ -39,7 +39,7 @@ def create_app(config_name="default"):
 
     @login_manager.unauthorized_handler
     def unauthorized():
-        """中文注释：API 返回 JSON，页面请求继续跳转登录页。"""
+        """API 返回 JSON，页面请求继续跳转登录页。"""
         if request.path.startswith("/api/"):
             from app.utils.api import error_api
 
@@ -52,9 +52,9 @@ def create_app(config_name="default"):
 
     @app.context_processor
     def inject_global_values():
-        """中文注释：向模板注入项目标题和当前技术栈说明。"""
+        """向模板注入项目标题和当前技术栈说明。"""
         return {
-            "project_name": "鱼菜共生监控系统",
+            "project_name": "Aquaponics Monitoring System",
         }
 
     from app.controllers.ai import bp as ai_bp
@@ -86,7 +86,7 @@ def create_app(config_name="default"):
 
     @login_manager.user_loader
     def load_user(user_id):
-        """中文注释：供 Flask-Login 从会话中恢复用户。"""
+        """供 Flask-Login 从会话中恢复用户。"""
         return User.query.get(int(user_id))
 
     with app.app_context():

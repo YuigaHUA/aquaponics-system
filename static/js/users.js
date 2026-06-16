@@ -1,4 +1,4 @@
-// 中文注释：用户管理页负责账号列表、表单保存和删除操作。
+// User management page handles account list, form save and delete operations.
 (function () {
     const endpoints = window.USER_ENDPOINTS;
     const api = window.AppApi;
@@ -23,7 +23,7 @@
         alertContainer.innerHTML = `
             <div class="alert alert-${level} alert-dismissible fade show" role="alert">
                 ${utils.escapeHtml(message)}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="关闭"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
     }
@@ -38,13 +38,13 @@
         fields.username.value = user ? user.username : "";
         fields.displayName.value = user ? user.display_name : "";
         fields.password.required = !user;
-        title.textContent = user ? "编辑用户" : "新增用户";
+        title.textContent = user ? "Edit User" : "Add User";
         userModal.show();
     }
 
     function renderTable() {
         if (!users.length) {
-            tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-body-secondary">暂无用户</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="4" class="text-center text-body-secondary">No users available</td></tr>';
             return;
         }
         tableBody.innerHTML = users.map((user) => `
@@ -53,8 +53,8 @@
                 <td>${utils.escapeHtml(user.display_name)}</td>
                 <td>${utils.formatDateTime(user.created_at)}</td>
                 <td class="text-end">
-                    <button type="button" class="btn btn-sm btn-outline-primary" data-edit-user="${user.id}">编辑</button>
-                    <button type="button" class="btn btn-sm btn-outline-danger" data-delete-user="${user.id}">删除</button>
+                    <button type="button" class="btn btn-sm btn-outline-primary" data-edit-user="${user.id}">Edit</button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" data-delete-user="${user.id}">Delete</button>
                 </td>
             </tr>
         `).join("");
@@ -67,12 +67,12 @@
         });
         tableBody.querySelectorAll("[data-delete-user]").forEach((button) => {
             button.addEventListener("click", async function () {
-                if (!window.confirm("确认删除该用户吗？")) {
+                if (!window.confirm("Confirm delete this user?")) {
                     return;
                 }
                 try {
                     await api.deleteJson(userUrl(button.dataset.deleteUser));
-                    showAlert("用户已删除", "success");
+                    showAlert("User deleted", "success");
                     await loadUsers();
                 } catch (error) {
                     showAlert(error.message, "danger");
@@ -100,10 +100,10 @@
         try {
             if (fields.id.value) {
                 await api.putJson(userUrl(fields.id.value), payload);
-                showAlert("用户已更新", "success");
+                showAlert("User updated", "success");
             } else {
                 await api.postJson(endpoints.usersUrl, payload);
-                showAlert("用户已创建", "success");
+                showAlert("User created", "success");
             }
             userModal.hide();
             await loadUsers();

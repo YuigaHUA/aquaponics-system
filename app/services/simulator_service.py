@@ -15,7 +15,7 @@ _runtime_lock = threading.Lock()
 
 
 class EmbeddedSimulatorRuntime:
-    """中文注释：在 Flask 进程内运行的 MQTT 数据模拟器。"""
+    """在 Flask 进程内运行的 MQTT 数据模拟器。"""
 
     def __init__(self, app):
         self.app = app
@@ -138,9 +138,9 @@ class EmbeddedSimulatorRuntime:
         )
         if success:
             config.switch_value = action
-            message = f"{device.name}已切换为{'开启' if action == 'on' else '关闭'}"
+            message = f"{device.name} turned {'on' if action == 'on' else 'off'}"
         else:
-            message = "命令无效、设备离线或设备不支持开关控制"
+            message = "Invalid command, device offline or device does not support switch control"
         reported_at = now_local().replace(microsecond=0).isoformat()
         self.client.publish(
             self.app.config["MQTT_TOPIC_CONTROL_RESULT"],
@@ -163,7 +163,7 @@ class EmbeddedSimulatorRuntime:
 
 
 def start_simulator(app):
-    """中文注释：随 Flask 主站启动内置数据模拟器。"""
+    """随 Flask 主站启动内置数据模拟器。"""
     global _simulator_runtime
     if app.config.get("TESTING") or not app.config.get("ENABLE_SIMULATOR", True):
         return None
@@ -176,7 +176,7 @@ def start_simulator(app):
 
 
 def restart_simulator():
-    """中文注释：设备或模拟配置变更后重启后台模拟器。"""
+    """设备或模拟配置变更后重启后台模拟器。"""
     global _simulator_runtime
     with _runtime_lock:
         if _simulator_runtime is None:

@@ -1,36 +1,36 @@
 {% extends "base.html" %}
-{% block title %}模拟器配置 | {{ project_name }}{% endblock %}
-{% block page_title %}模拟器配置{% endblock %}
-{% block page_title_breadcrumb %}模拟器配置{% endblock %}
+{% block title %}Simulator Config | {{ project_name }}{% endblock %}
+{% block page_title %}Simulator Config{% endblock %}
+{% block page_title_breadcrumb %}Simulator Config{% endblock %}
 {% block content %}
-<!-- 中文注释：模拟器配置按设备列表生成，保存后重启内置模拟线程。 -->
+<!-- Simulator config generates device list and restarts built-in simulator thread after save. -->
 <div class="row">
     <div class="col-12">
         <div id="simulatorAlert"></div>
         <div class="card">
             <div class="card-header">
-                <h3 class="card-title">设备数据模拟配置</h3>
+                <h3 class="card-title">Device Data Simulation Config</h3>
             </div>
             <form id="simulatorForm">
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover align-middle mb-0">
                         <thead>
                             <tr>
-                                <th>设备</th>
-                                <th>类型</th>
-                                <th>在线</th>
-                                <th>最小值</th>
-                                <th>最大值</th>
-                                <th>波动大小</th>
-                                <th>开关值</th>
+                                <th>Device</th>
+                                <th>Type</th>
+                                <th>Online</th>
+                                <th>Min Value</th>
+                                <th>Max Value</th>
+                                <th>Fluctuation</th>
+                                <th>Switch Value</th>
                             </tr>
                         </thead>
                         <tbody id="simulatorConfigBody"></tbody>
                     </table>
                 </div>
                 <div class="card-footer text-end">
-                    <button type="button" class="btn btn-outline-secondary" id="reloadSimulatorButton">重新加载</button>
-                    <button type="submit" class="btn btn-primary">保存并重启模拟器</button>
+                    <button type="button" class="btn btn-outline-secondary" id="reloadSimulatorButton">Reload</button>
+                    <button type="submit" class="btn btn-primary">Save and Restart Simulator</button>
                 </div>
             </form>
         </div>
@@ -39,8 +39,8 @@
 {% endblock %}
 {% block scripts %}
 <script>
-    // 中文注释：模拟器配置保存后会触发后台模拟线程重启。
-    window.SIMULATOR_ENDPOINTS = {
+    // Simulator config save triggers background simulator thread restart.
+    globalThis.SIMULATOR_ENDPOINTS = {
         configsUrl: "{{ url_for('api.simulator_configs') }}"
     };
 </script>

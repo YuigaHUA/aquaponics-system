@@ -7,7 +7,7 @@ INSTANCE_DIR = BASE_DIR / "instance"
 
 
 def _default_database_uri():
-    """中文注释：优先使用写死的 MySQL，驱动缺失或连接失败时回退 SQLite。"""
+    """Prefer MySQL, fall back to SQLite if driver missing or connection fails."""
     if find_spec("pymysql") is not None:
         try:
             import pymysql
@@ -27,7 +27,7 @@ def _default_database_uri():
 
 
 class Config:
-    """中文注释：集中管理 Flask、数据库、MQTT 和演示系统基础配置。"""
+    """Centralized management of Flask, database, MQTT and demo system base config."""
 
     SECRET_KEY = "aquaponics-dev-secret-key"
     DEBUG = True
@@ -54,7 +54,7 @@ class Config:
 
     ADMIN_DEFAULT_USERNAME = "admin"
     ADMIN_DEFAULT_PASSWORD = "123456"
-    ADMIN_DISPLAY_NAME = "系统管理员"
+    ADMIN_DISPLAY_NAME = "Administrator"
 
     MQTT_TOPIC_ENVIRONMENT = "aquaponics/telemetry/environment"
     MQTT_TOPIC_DEVICE = "aquaponics/telemetry/device"
@@ -64,7 +64,7 @@ class Config:
     DEVICE_DEFINITIONS = [
         {
             "code": "water_temperature_sensor",
-            "name": "水温传感器",
+            "name": "Water Temperature Sensor",
             "device_type": "water_temperature",
             "data_type": "numeric",
             "unit": "°C",
@@ -73,11 +73,11 @@ class Config:
             "simulator_min": 22.0,
             "simulator_max": 28.0,
             "simulator_fluctuation": 0.8,
-            "description": "监测鱼池水温，辅助判断鱼类活性和硝化系统状态。",
+            "description": "Monitors fish tank water temperature to assess fish activity and nitrification system status.",
         },
         {
             "code": "ph_sensor",
-            "name": "pH 传感器",
+            "name": "pH Sensor",
             "device_type": "ph",
             "data_type": "numeric",
             "unit": "",
@@ -86,11 +86,11 @@ class Config:
             "simulator_min": 6.4,
             "simulator_max": 7.2,
             "simulator_fluctuation": 0.12,
-            "description": "监测水体酸碱度，保障鱼类和植物根系处于适宜环境。",
+            "description": "Monitors water pH level to ensure fish and plant roots are in optimal conditions.",
         },
         {
             "code": "dissolved_oxygen_sensor",
-            "name": "溶解氧传感器",
+            "name": "Dissolved Oxygen Sensor",
             "device_type": "dissolved_oxygen",
             "data_type": "numeric",
             "unit": "mg/L",
@@ -99,11 +99,11 @@ class Config:
             "simulator_min": 5.8,
             "simulator_max": 8.5,
             "simulator_fluctuation": 0.35,
-            "description": "监测鱼池溶解氧浓度，用于联动增氧设备和告警。",
+            "description": "Monitors dissolved oxygen in fish tank for aerator control and alerts.",
         },
         {
             "code": "air_temperature_sensor",
-            "name": "空气温度传感器",
+            "name": "Air Temperature Sensor",
             "device_type": "air_temperature",
             "data_type": "numeric",
             "unit": "°C",
@@ -112,11 +112,11 @@ class Config:
             "simulator_min": 22.0,
             "simulator_max": 30.0,
             "simulator_fluctuation": 0.9,
-            "description": "监测温室空气温度，辅助控制通风和补光策略。",
+            "description": "Monitors greenhouse air temperature for ventilation and supplemental lighting control.",
         },
         {
             "code": "air_humidity_sensor",
-            "name": "空气湿度传感器",
+            "name": "Air Humidity Sensor",
             "device_type": "air_humidity",
             "data_type": "numeric",
             "unit": "%",
@@ -125,11 +125,11 @@ class Config:
             "simulator_min": 55.0,
             "simulator_max": 78.0,
             "simulator_fluctuation": 2.5,
-            "description": "监测温室空气湿度，辅助判断蒸腾和通风状态。",
+            "description": "Monitors greenhouse humidity to assess transpiration and ventilation status.",
         },
         {
             "code": "water_level_sensor",
-            "name": "水位传感器",
+            "name": "Water Level Sensor",
             "device_type": "water_level",
             "data_type": "numeric",
             "unit": "cm",
@@ -138,11 +138,11 @@ class Config:
             "simulator_min": 35.0,
             "simulator_max": 70.0,
             "simulator_fluctuation": 2.0,
-            "description": "监测鱼池或回水仓水位，辅助补水和防干抽。",
+            "description": "Monitors fish tank or return water reservoir level for refill and dry-run protection.",
         },
         {
             "code": "ec_sensor",
-            "name": "EC 传感器",
+            "name": "EC Sensor",
             "device_type": "ec",
             "data_type": "numeric",
             "unit": "mS/cm",
@@ -151,11 +151,11 @@ class Config:
             "simulator_min": 1.1,
             "simulator_max": 1.8,
             "simulator_fluctuation": 0.08,
-            "description": "监测水体电导率，反映营养盐浓度变化。",
+            "description": "Monitors water electrical conductivity to reflect nutrient concentration changes.",
         },
         {
             "code": "water_flow_sensor",
-            "name": "水流量传感器",
+            "name": "Water Flow Sensor",
             "device_type": "water_flow",
             "data_type": "numeric",
             "unit": "L/min",
@@ -164,11 +164,11 @@ class Config:
             "simulator_min": 12.0,
             "simulator_max": 24.0,
             "simulator_fluctuation": 1.5,
-            "description": "监测循环管路流量，辅助发现堵塞、缺水或水泵异常。",
+            "description": "Monitors circulation pipe flow to detect blockages, water shortage or pump anomalies.",
         },
         {
             "code": "nitrate_sensor",
-            "name": "硝酸盐传感器",
+            "name": "Nitrate Sensor",
             "device_type": "nitrate",
             "data_type": "numeric",
             "unit": "mg/L",
@@ -177,79 +177,79 @@ class Config:
             "simulator_min": 30.0,
             "simulator_max": 90.0,
             "simulator_fluctuation": 5.0,
-            "description": "监测硝酸盐水平，反映系统硝化效率和植物吸收情况。",
+            "description": "Monitors nitrate levels to reflect system nitrification efficiency and plant absorption.",
         },
         {
             "code": "water_pump",
-            "name": "循环水泵",
+            "name": "Circulation Pump",
             "device_type": "pump",
             "data_type": "switch",
             "unit": "",
             "simulator_switch_value": "on",
-            "description": "负责循环水体，维持鱼池与种植槽之间的水流。",
+            "description": "Circulates water between fish tank and grow bed.",
         },
         {
             "code": "oxygen_pump",
-            "name": "增氧机",
+            "name": "Aerator",
             "device_type": "oxygen",
             "data_type": "switch",
             "unit": "",
             "simulator_switch_value": "on",
-            "description": "负责提升溶解氧，保证鱼池含氧量处于安全范围。",
+            "description": "Increases dissolved oxygen to maintain safe oxygen levels in fish tank.",
         },
         {
             "code": "grow_light",
-            "name": "补光灯",
+            "name": "Grow Light",
             "device_type": "light",
             "data_type": "switch",
             "unit": "",
             "simulator_switch_value": "on",
-            "description": "在自然光不足时补充光照，支持植物生长。",
+            "description": "Supplements natural light when insufficient to support plant growth.",
         },
         {
             "code": "ventilation_fan",
-            "name": "风机",
+            "name": "Ventilation Fan",
             "device_type": "fan",
             "data_type": "switch",
             "unit": "",
             "simulator_switch_value": "on",
-            "description": "用于温湿度平衡和空气流通。",
+            "description": "Balances temperature and humidity, ensures air circulation.",
         },
         {
             "code": "auto_feeder",
-            "name": "自动投喂机",
+            "name": "Auto Feeder",
             "device_type": "feeder",
             "data_type": "switch",
             "unit": "",
             "simulator_switch_value": "off",
-            "description": "按养殖计划进行定时投喂，减少人工值守压力。",
+            "description": "Timed feeding according to breeding schedule, reduces manual monitoring.",
         },
         {
             "code": "water_heater",
-            "name": "加热棒",
+            "name": "Water Heater",
             "device_type": "heater",
             "data_type": "switch",
             "unit": "",
             "simulator_switch_value": "off",
-            "description": "在低温时辅助提升水温，保障鱼类和硝化菌活性。",
+            "description": "Auxiliary water heating in low temperatures to protect fish and nitrifying bacteria.",
         },
         {
             "code": "refill_valve",
-            "name": "自动补水阀",
+            "name": "Auto Refill Valve",
             "device_type": "valve",
             "data_type": "switch",
             "unit": "",
             "simulator_switch_value": "off",
-            "description": "水位偏低时开启补水，维持鱼池和回水仓安全水位。",
+            "description": "Opens when water level is low to maintain safe water level in fish tank and reservoir.",
         },
     ]
 
     METRIC_LABELS = {
-        "water_temperature": "水温",
+        "water_temperature": "Water Temp",
         "ph": "pH",
-        "dissolved_oxygen": "溶解氧",
-        "air_temperature": "空气温度",
-        "air_humidity": "空气湿度",
+        "dissolved_oxygen": "DO",
+        "air_temperature": "Air Temp",
+        "air_humidity": "Humidity",
     }
 
     METRIC_UNITS = {
